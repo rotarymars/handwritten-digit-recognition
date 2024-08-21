@@ -43,6 +43,7 @@ for i in range(100):
 '''
 
 model.add(tf.keras.layers.Dense(units=784, activation=tf.nn.relu))
+model.add(tf.keras.layers.Dense(units=800, activation=tf.nn.relu))
 model.add(tf.keras.layers.Dense(units=700, activation=tf.nn.relu))
 model.add(tf.keras.layers.Dense(units=600, activation=tf.nn.relu))
 model.add(tf.keras.layers.Dense(units=500, activation=tf.nn.relu))

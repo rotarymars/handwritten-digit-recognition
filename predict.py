@@ -13,6 +13,7 @@ totalcount = 0
 accuratecount = 0
 x_test = []
 y_test = []
+wrongname = []
 for firstnum in range(0, 10):
     index = 0
     while True:
@@ -26,6 +27,8 @@ for firstnum in range(0, 10):
             x_test.append(img_train)
             y_test.append(firstnum)
             print('predicted ' + str(firstnum) + ' as' + str(np.argmax(prediction)))
+            if firstnum != np.argmax(prediction):
+                wrongname.append(filepath)
             index += 1
         else:
             break
@@ -37,6 +40,8 @@ y_test = np.array(y_test)
 loss, accuracy = model.evaluate(x_test, y_test)
 print(loss)
 print(accuracy)
+for i in wrongname:
+    print(f'{i} was wrong')
 
 '''
 for i in range(0, 100):
