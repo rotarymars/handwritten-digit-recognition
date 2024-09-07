@@ -1,40 +1,24 @@
 import cv2 as cv
+import time
 import random
 import tqdm
 import os
 import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
-plotbool = True
+plotbool = False
 model = tf.keras.models.Sequential()
 model.add(tf.keras.layers.Flatten(input_shape=(28,28)))
-model.add(tf.keras.layers.Dense(units=200, activation=tf.nn.relu))
-model.add(tf.keras.layers.Dense(units=100, activation=tf.nn.relu))
-model.add(tf.keras.layers.Dense(units=200, activation=tf.nn.relu))
-model.add(tf.keras.layers.Dense(units=200, activation=tf.nn.relu))
-model.add(tf.keras.layers.Dense(units=100, activation=tf.nn.relu))
-model.add(tf.keras.layers.Dense(units=200, activation=tf.nn.relu))
-model.add(tf.keras.layers.Dense(units=100, activation=tf.nn.relu))
-model.add(tf.keras.layers.Dense(units=200, activation=tf.nn.relu))
-model.add(tf.keras.layers.Dense(units=100, activation=tf.nn.relu))
-model.add(tf.keras.layers.Dense(units=200, activation=tf.nn.relu))
-model.add(tf.keras.layers.Dense(units=100, activation=tf.nn.relu))
-model.add(tf.keras.layers.Dense(units=200, activation=tf.nn.relu))
-model.add(tf.keras.layers.Dense(units=100, activation=tf.nn.relu))
-model.add(tf.keras.layers.Dense(units=200, activation=tf.nn.relu))
-model.add(tf.keras.layers.Dense(units=100, activation=tf.nn.relu))
-model.add(tf.keras.layers.Dense(units=200, activation=tf.nn.relu))
-model.add(tf.keras.layers.Dense(units=100, activation=tf.nn.relu))
-model.add(tf.keras.layers.Dense(units=200, activation=tf.nn.relu))
-model.add(tf.keras.layers.Dense(units=100, activation=tf.nn.relu))
-model.add(tf.keras.layers.Dense(units=200, activation=tf.nn.relu))
-model.add(tf.keras.layers.Dense(units=100, activation=tf.nn.relu))
+maxunit = 780
+descending = 100
+while True:
+    if maxunit - descending >= 10:
+        print(maxunit-descending)
+        model.add(tf.keras.layers.Dense(units=maxunit-descending, activation=tf.nn.relu))
+        maxunit-=descending
+    else:
+        break
 model.add(tf.keras.layers.Dense(units=10, activation=tf.nn.softmax))
-model.add(tf.keras.layers.Dense(units=100, activation=tf.nn.relu))
-model.add(tf.keras.layers.Dense(units=10, activation=tf.nn.softmax))
-model.add(tf.keras.layers.Dense(units=100, activation=tf.nn.relu))
-model.add(tf.keras.layers.Dense(units=10, activation=tf.nn.softmax))
-
 model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 files = []
 for i in range(0, 10):
@@ -43,8 +27,8 @@ for i in range(0, 10):
     tmpfiles = [path + j for j in tmpfiles]
     files = files + tmpfiles
 random.shuffle(files)
-MAX_PICTURE = 100000 # 何枚の画像を同時にメモリに配置するか
-EPOCH = 1000 # 何回画像を学習させるか
+MAX_PICTURE = 10000 # 何枚の画像を同時にメモリに配置するか
+EPOCH = 100 # 何回画像を学習させるか
 nowindex = 0 # どこのインデックスまで行ったか
 if plotbool:
     test_x = []
@@ -58,10 +42,13 @@ if plotbool:
     test_y = np.array(test_y)
     plotaccuracy = []
     plotloss = []
+    plottime = []
 for i in tqdm.tqdm(range(EPOCH)):
     nowindex = 0
     train_x = []
     train_y = []
+    if plotbool:
+        beforetime = time.time()
     while True:
         filepath = files[nowindex]
         img = cv.imread(filepath)[:, :, 0]
@@ -81,6 +68,7 @@ for i in tqdm.tqdm(range(EPOCH)):
         loss, accuracy = model.evaluate(test_x, test_y)
         plotaccuracy.append(accuracy)
         plotloss.append(loss)
+        plottime.append(time.time()-beforetime)
 model.save("model.h5") # 作成したモデルを保存
 if plotbool:
     fig = plt.figure()
@@ -101,7 +89,29 @@ if plotbool:
     ax1.set_ylabel(r'accuracy')
     ax1.grid(True)
     ax2.set_ylabel(r'loss')
-    ax1.set_ylim(95, 100)
-    ax2.set_ylim(0, 1)
+    ax1.set_ylim((max(plotaccuracy)+min(plotaccuracy))/2, 1)
+    ax2.set_ylim(min(plotloss),max(plotloss))
     fig.show()
     plt.show()
+    fig = plt.figure()
+    ax1 = fig.add_subplot(111)
+    t = range(EPOCH)
+    y1 = plotaccuracy
+    ln1=ax1.plot(t, y1,'C0',label=r'accuracy')
+
+    ax2 = ax1.twinx()
+    y2 = plotloss
+    ln2=ax2.plot(t,y2,'C1',label=r'time')
+
+    h1, l1 = ax1.get_legend_handles_labels()
+    h2, l2 = ax2.get_legend_handles_labels()
+    ax1.legend(h1+h2, l1+l2, loc='lower right')
+
+    ax1.set_xlabel('t')
+    ax1.set_ylabel(r'accuracy')
+    ax1.grid(True)
+    ax2.set_ylabel(r'time')
+    ax1.set_ylim((max(plotaccuracy)+min(plotaccuracy))/2, 1)
+    fig.show()
+    plt.show()
+exit()

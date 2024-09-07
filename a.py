@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
 import os
+import re
 
 model = tf.keras.models.load_model('model.h5', custom_objects={'softmax_v2': tf.nn.softmax}) # モデルの読み込み
 
@@ -23,3 +24,10 @@ loss, accuracy = model.evaluate(test_x, test_y)
 print("loss: ", loss)
 print("accuracy: ", accuracy)
 print(picturelist)
+
+for i in picturelist:
+    listedfile=os.listdir(f'./data/{i[0]}')
+    listedfile.sort()
+    print(i)
+    print(f'cp ./test/{i} ./data/{i[0]}/{re.match(r"(.*).png",listedfile[-1]).group(0)}')
+    os.system(f'cp ./test/{i} ./data/{i[0]}/{re.match(r"(.*).png",listedfile[-1]).group(0)}')
