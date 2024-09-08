@@ -69,6 +69,8 @@ for i in tqdm.tqdm(range(EPOCH)):
         plotaccuracy.append(accuracy)
         plotloss.append(loss)
         plottime.append(time.time()-beforetime)
+if os.path.isfile("model.h5"):
+    os.remove("model.h5")
 model.save("model.h5") # 作成したモデルを保存
 if plotbool:
     fig = plt.figure()
