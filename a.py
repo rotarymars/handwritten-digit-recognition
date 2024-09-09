@@ -35,4 +35,5 @@ for i in picturelist:
     listedfile=os.listdir(f'./data/{i[0]}')
     listedfile=sorted(listedfile, key=comp)
     print(i)
-    os.system(f'cp ./test/{i} ./data/{i[0]}/{re.match(r"(.*).png",listedfile[-1]).group(0)}')
+    print(f'cp ./test/{i} ./data/{i[0]}/{str(int(re.match(r"(.*).png",listedfile[-1]).group(1))+1)}.png')
+    os.system(f'cp ./test/{i} ./data/{i[0]}/{str(int(re.match(r"(.*).png",listedfile[-1]).group(1))+1)}.png')
