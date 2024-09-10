@@ -1,2 +1,1 @@
-python train.py
-python predict.py
+python train.py && python a.py

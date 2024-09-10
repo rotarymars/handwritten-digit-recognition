@@ -18,6 +18,7 @@ test_y = []
 picturelist = []
 for i in tqdm.tqdm(os.listdir("./test/")):
     img = cv.imread("./test/" + i)[:, :, 0]
+    # print(i)
     img = np.invert(img)
     imga = np.array([img])
     test_x.append(img)
