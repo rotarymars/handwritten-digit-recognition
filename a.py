@@ -38,3 +38,7 @@ for i in picturelist:
     print(i)
     print(f'cp ./test/{i} ./data/{i[0]}/{str(int(re.match(r"(.*).png",listedfile[-1]).group(1))+1)}.png')
     os.system(f'cp ./test/{i} ./data/{i[0]}/{str(int(re.match(r"(.*).png",listedfile[-1]).group(1))+1)}.png')
+if len(picturelist) == 0:
+    exit(1)
+else:
+    exit(0)

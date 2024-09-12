@@ -10,7 +10,7 @@ plotbool = False
 model = tf.keras.models.Sequential()
 model.add(tf.keras.layers.Flatten(input_shape=(28,28)))
 maxunit = 780
-descending = 80
+descending = 70
 while True:
     if maxunit - descending >= 10:
         print(maxunit-descending)
