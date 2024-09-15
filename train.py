@@ -10,7 +10,7 @@ plotbool = False
 model = tf.keras.models.Sequential()
 model.add(tf.keras.layers.Flatten(input_shape=(28,28)))
 maxunit = 780
-descending = 70
+descending = 95
 while True:
     if maxunit - descending >= 10:
         print(maxunit-descending)
@@ -27,8 +27,8 @@ for i in range(0, 10):
     tmpfiles = [path + j for j in tmpfiles]
     files = files + tmpfiles
 random.shuffle(files)
-MAX_PICTURE = 10000 # 何枚の画像を同時にメモリに配置するか
-EPOCH = 100 # 何回画像を学習させるか
+MAX_PICTURE = 4000 # 何枚の画像を同時にメモリに配置するか
+EPOCH = 400 # 何回画像を学習させるか
 nowindex = 0 # どこのインデックスまで行ったか
 if plotbool:
     test_x = []
